@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Video Profesional Multi-Foto (Browser Direct)</title>
-    <!-- Tailwind CSS untuk Tampilan Modern -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FFmpeg WebAssembly Library -->
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <!-- FFmpeg WebAssembly Single-Threaded (Fix SharedArrayBuffer Error) -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 font-sans">
     <div class="max-w-2xl mx-auto bg-slate-800 rounded-2xl shadow-2xl p-6 border border-slate-700">
@@ -27,7 +27,6 @@
                 </label>
                 <input type="file" id="inputFotos" accept="image/jpeg, image/png" multiple 
                     class="w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500 cursor-pointer">
-                <p class="text-xs text-slate-400 mt-1">Tekan tombol Ctrl/Shift saat memilih foto untuk memilih lebih dari satu.</p>
             </div>
 
             <!-- Input Pengaturan Durasi -->
@@ -86,7 +85,11 @@
 
     <script>
         const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: true });
+        // Inisialisasi FFmpeg versi kompatibel tanpa SharedArrayBuffer
+        const ffmpeg = createFFmpeg({
+            log: true,
+            corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js'
+        });
 
         function log(message) {
             const logEl = document.getElementById('logOutput');
@@ -120,7 +123,7 @@
 
             try {
                 if (!ffmpeg.isLoaded()) {
-                    log("Memuat engine FFmpeg di browser...");
+                    log("Memuat engine FFmpeg kompatibel...");
                     await ffmpeg.load();
                 }
                 setProgress(15);
@@ -139,7 +142,6 @@
                     
                     ffmpeg.FS('writeFile', fileName, await fetchFile(fotoFiles[i]));
                     
-                    // Bergantian efek Zoom-In (genap) dan Zoom-Out (ganjil)
                     let zoomFilter = "";
                     if (i % 2 === 0) {
                         zoomFilter = `scale=2000:2000,zoompan=z='min(zoom+0.0015,1.5)':d=${frames}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920,fps=${fps}`;
@@ -189,7 +191,7 @@
 
                 setProgress(100);
                 resultSection.classList.remove('hidden');
-                log("SELESAI! Video multi-foto siap diputar dan diunduh.");
+                log("SELESAI! Video siap diputar dan diunduh.");
 
             } catch (err) {
                 log("ERROR: " + err.message);
