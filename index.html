@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Video Generator - TikTok & Shopee</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Style scrollbar tipis */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 3px;
+        }
+        /* Animation frame preview 9:16 aspect ratio container */
+        .aspect-9-16 {
+            aspect-ratio: 9 / 16;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-pink-500 to-violet-600 p-2.5 rounded-xl shadow-lg shadow-pink-500/20">
+                    <i data-lucide="video" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                        Master Video Generator
+                    </h1>
+                    <p class="text-xs text-slate-400">Pembuat Video TikTok & Shopee (9:16)</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                    Browser Render Mode
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 py-8 w-full flex-grow">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Side: Control Panel & Form (7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-sm shadow-xl">
+                    <h2 class="text-base font-semibold text-slate-200 mb-1 flex items-center gap-2">
+                        <i data-lucide="upload-cloud" class="w-5 h-5 text-pink-500"></i>
+                        Unggah Bahan Media
+                    </h2>
+                    <p class="text-xs text-slate-400 mb-5">Masukkan foto dan video klip produk Anda untuk digabungkan secara otomatis.</p>
+
+                    <div class="space-y-4">
+                        <!-- Input Foto 1 -->
+                        <div class="p-4 bg-slate-800/50 border border-slate-700/60 rounded-xl hover:border-pink-500/50 transition duration-200">
+                            <label class="block text-xs font-medium text-slate-300 mb-2 flex justify-between">
+                                <span>1. Foto Pembuka (Foto 1)</span>
+                                <span class="text-slate-400 text-[10px]">Durasi default: 3 Detik</span>
+                            </label>
+                            <input type="file" id="inputFoto1" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-pink-500/10 file:text-pink-400 hover:file:bg-pink-500/20 cursor-pointer">
+                        </div>
+
+                        <!-- Input Video 1 -->
+                        <div class="p-4 bg-slate-800/50 border border-slate-700/60 rounded-xl hover:border-violet-500/50 transition duration-200">
+                            <label class="block text-xs font-medium text-slate-300 mb-2 flex justify-between">
+                                <span>2. Video Utama (Video 1)</span>
+                                <span class="text-slate-400 text-[10px]">MP4 / MOV</span>
+                            </label>
+                            <input type="file" id="inputVideo1" accept="video/*" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-violet-500/10 file:text-violet-400 hover:file:bg-violet-500/20 cursor-pointer">
+                        </div>
+
+                        <!-- Input Foto 2 -->
+                        <div class="p-4 bg-slate-800/50 border border-slate-700/60 rounded-xl hover:border-pink-500/50 transition duration-200">
+                            <label class="block text-xs font-medium text-slate-300 mb-2 flex justify-between">
+                                <span>3. Foto Penutup (Foto 2)</span>
+                                <span class="text-slate-400 text-[10px]">Durasi default: 3 Detik</span>
+                            </label>
+                            <input type="file" id="inputFoto2" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-pink-500/10 file:text-pink-400 hover:file:bg-pink-500/20 cursor-pointer">
+                        </div>
+
+                        <!-- Input Musik -->
+                        <div class="p-4 bg-slate-800/50 border border-slate-700/60 rounded-xl hover:border-cyan-500/50 transition duration-200">
+                            <label class="block text-xs font-medium text-slate-300 mb-2 flex justify-between">
+                                <span>4. Musik Latar (Musik Backsound)</span>
+                                <span class="text-slate-400 text-[10px]">MP3 / WAV</span>
+                            </label>
+                            <input type="file" id="inputMusik" accept="audio/*" class="block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-sm shadow-xl space-y-4">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="btnProcess" onclick="processVideo()" class="flex-1 py-3.5 px-6 rounded-xl bg-gradient-to-r from-pink-500 to-violet-600 hover:from-pink-600 hover:to-violet-700 text-white font-semibold text-sm shadow-lg shadow-pink-500/25 flex items-center justify-center gap-2 transition active:scale-[0.98]">
+                            <i data-lucide="play-circle" class="w-5 h-5"></i>
+                            <span>Proses & Pratinjau Video</span>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar (Hidden by default) -->
+                    <div id="progressContainer" class="hidden space-y-2 pt-2">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span id="progressText">Merender Video Vertikal...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700">
+                            <div id="progressBar" class="bg-gradient-to-r from-pink-500 to-violet-500 h-full w-0 transition-all duration-300 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: 9:16 Video Player Preview (5 Cols) -->
+            <div class="lg:col-span-5 flex flex-col items-center">
+                <div class="w-full max-w-[320px] bg-slate-900 border border-slate-800 rounded-3xl p-4 shadow-2xl shadow-violet-950/40 relative">
+                    
+                    <!-- Header Mobile Mockup -->
+                    <div class="flex justify-between items-center mb-3 px-2">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="text-[10px] font-semibold text-slate-400 tracking-wider">9:16 PREVIEW</span>
+                    </div>
+
+                    <!-- Video / Canvas Screen Container -->
+                    <div class="relative w-full aspect-9-16 bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 flex items-center justify-center group shadow-inner">
+                        
+                        <!-- Canvas Tersembunyi untuk Merender -->
+                        <canvas id="renderCanvas" class="hidden"></canvas>
+
+                        <!-- Video Player Hasil -->
+                        <video id="previewPlayer" controls class="w-full h-full object-cover hidden" playsinline></video>
+
+                        <!-- Empty State Placeholder -->
+                        <div id="placeholderUI" class="text-center p-6 space-y-3">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center mx-auto text-slate-500">
+                                <i data-lucide="smartphone" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-medium text-slate-300">Belum Ada Video</h3>
+                                <p class="text-xs text-slate-500 mt-1">Unggah foto/video lalu klik tombol proses untuk melihat hasilnya di sini.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button: Download Video Master -->
+                    <div class="mt-4">
+                        <a id="btnDownload" href="#" download="Video_TikTok_Shopee_Master.webm" class="w-full py-3 px-4 rounded-xl bg-slate-800 border border-slate-700 hover:bg-emerald-600 hover:border-emerald-500 hover:text-white text-slate-400 font-semibold text-xs flex items-center justify-center gap-2 transition duration-200 pointer-events-none opacity-50">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Unduh Video Master (HD)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer Credit -->
+    <footer class="border-t border-slate-800/80 bg-slate-900/40 py-6 text-center">
+        <p class="text-xs text-slate-500 font-medium tracking-wide">
+            Created By <span class="text-slate-300 font-semibold">Muhlisin</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- Script Logika Penggabungan Video Interaktif (Canvas & Web MediaRecorder API) -->
+    <script>
+        // Inisialisasi Ikon Lucide
+        lucide.createIcons();
+
+        // Elemen DOM
+        const inputFoto1 = document.getElementById('inputFoto1');
+        const inputVideo1 = document.getElementById('inputVideo1');
+        const inputFoto2 = document.getElementById('inputFoto2');
+        const inputMusik = document.getElementById('inputMusik');
+
+        const btnProcess = document.getElementById('btnProcess');
+        const btnDownload = document.getElementById('btnDownload');
+        
+        const previewPlayer = document.getElementById('previewPlayer');
+        const placeholderUI = document.getElementById('placeholderUI');
+        const renderCanvas = document.getElementById('renderCanvas');
+        const ctx = renderCanvas.getContext('2d');
+
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressPercent = document.getElementById('progressPercent');
+
+        // Dimensi 9:16 Standar Vertikal
+        renderCanvas.width = 720;
+        renderCanvas.height = 1280;
+
+        let recordedBlobs = [];
+        let mediaRecorder;
+
+        // Helper Membaca File Gambar
+        function loadImage(file) {
+            return new Promise((resolve) => {
+                if (!file) resolve(null);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => resolve(img);
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Helper Membaca Video
+        function loadVideo(file) {
+            return new Promise((resolve) => {
+                if (!file) resolve(null);
+                const video = document.createElement('video');
+                video.muted = true;
+                video.src = URL.createObjectURL(file);
+                video.onloadeddata = () => resolve(video);
+            });
+        }
+
+        // Helper Gambar Fit & Cover Rasio 9:16
+        function drawCover(ctx, img, width, height) {
+            const imgAspect = img.width / img.height;
+            const canvasAspect = width / height;
+            let renderWidth, renderHeight, x, y;
+
+            if (imgAspect > canvasAspect) {
+                renderHeight = height;
+                renderWidth = height * imgAspect;
+                x = (width - renderWidth) / 2;
+                y = 0;
+            } else {
+                renderWidth = width;
+                renderHeight = width / imgAspect;
+                x = 0;
+                y = (height - renderHeight) / 2;
+            }
+            ctx.drawImage(img, x, y, renderWidth, renderHeight);
+        }
+
+        // Fungsi Utama Pemrosesan Video
+        async function processVideo() {
+            const fileF1 = inputFoto1.files[0];
+            const fileV1 = inputVideo1.files[0];
+            const fileF2 = inputFoto2.files[0];
+            const fileMusik = inputMusik.files[0];
+
+            if (!fileF1 && !fileV1 && !fileF2) {
+                alert('Silakan pilih minimal 1 Foto atau 1 Video terlebih dahulu!');
+                return;
+            }
+
+            // Tampilkan UI Progress
+            progressContainer.classList.remove('hidden');
+            btnProcess.disabled = true;
+            btnProcess.classList.add('opacity-50');
+            
+            updateProgress(10, 'Membaca dan memuat file media...');
+
+            const img1 = await loadImage(fileF1);
+            const vid1 = await loadVideo(fileV1);
+            const img2 = await loadImage(fileF2);
+
+            updateProgress(30, 'Menyiapkan Canvas 9:16 Vertikal...');
+
+            // Setup Recording Stream dari Canvas
+            const canvasStream = renderCanvas.captureStream(30); // 30 FPS
+            
+            // Tambahkan Audio jika ada
+            if (fileMusik) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const audioBuffer = await fileMusik.arrayBuffer();
+                const decodedAudio = await audioContext.decodeAudioData(audioBuffer);
+                const audioSource = audioContext.createBufferSource();
+                audioSource.buffer = decodedAudio;
+
+                const dest = audioContext.createMediaStreamDestination();
+                audioSource.connect(dest);
+                audioSource.start();
+
+                // Gabungkan track suara musik ke stream video
+                canvasStream.addTrack(dest.stream.getAudioTracks()[0]);
+            }
+
+            recordedBlobs = [];
+            const options = { mimeType: 'video/webm;codecs=vp9' };
+            try {
+                mediaRecorder = new MediaRecorder(canvasStream, options);
+            } catch (e) {
+                mediaRecorder = new MediaRecorder(canvasStream);
+            }
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data && event.data.size > 0) {
+                    recordedBlobs.push(event.data);
+                }
+            };
+
+            mediaRecorder.start();
+            updateProgress(50, 'Merender video...');
+
+            // Rangkaian Animasi/Penggabungan Klip secara Realtime
+            // Klip 1: Foto 1 (3 Detik)
+            if (img1) {
+                updateProgress(60, 'Memproses Foto 1 (3 Detik)...');
+                await renderStaticFrame(img1, 3000);
+            }
+
+            // Klip 2: Video 1 (Memutar durasi video)
+            if (vid1) {
+                updateProgress(75, 'Memproses Video 1...');
+                await renderVideoFrames(vid1);
+            }
+
+            // Klip 3: Foto 2 (3 Detik)
+            if (img2) {
+                updateProgress(90, 'Memproses Foto 2 (3 Detik)...');
+                await renderStaticFrame(img2, 3000);
+            }
+
+            mediaRecorder.stop();
+            updateProgress(100, 'Selesai!');
+
+            // Tampilkan Hasil ke Pemutar
+            setTimeout(() => {
+                const superBuffer = new Blob(recordedBlobs, { type: 'video/webm' });
+                const videoURL = window.URL.createObjectURL(superBuffer);
+                
+                previewPlayer.src = videoURL;
+                previewPlayer.classList.remove('hidden');
+                placeholderUI.classList.add('hidden');
+
+                // Aktifkan Tombol Download
+                btnDownload.href = videoURL;
+                btnDownload.classList.remove('pointer-events-none', 'opacity-50', 'bg-slate-800', 'text-slate-400');
+                btnDownload.classList.add('bg-emerald-600', 'text-white', 'hover:bg-emerald-500', 'shadow-lg', 'shadow-emerald-600/20');
+
+                // Reset UI Progress
+                progressContainer.classList.add('hidden');
+                btnProcess.disabled = false;
+                btnProcess.classList.remove('opacity-50');
+            }, 1000);
+        }
+
+        // Render Frame Gambar Statis
+        function renderStaticFrame(img, durationMs) {
+            return new Promise((resolve) => {
+                const fps = 30;
+                const totalFrames = (durationMs / 1000) * fps;
+                let currentFrame = 0;
+
+                const interval = setInterval(() => {
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+                    drawCover(ctx, img, renderCanvas.width, renderCanvas.height);
+                    
+                    currentFrame++;
+                    if (currentFrame >= totalFrames) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 1000 / fps);
+            });
+        }
+
+        // Render Frame Video
+        function renderVideoFrames(videoElem) {
+            return new Promise((resolve) => {
+                videoElem.play();
+                
+                function loop() {
+                    if (videoElem.paused || videoElem.ended) {
+                        resolve();
+                        return;
+                    }
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+                    drawCover(ctx, videoElem, renderCanvas.width, renderCanvas.height);
+                    requestAnimationFrame(loop);
+                }
+                requestAnimationFrame(loop);
+            });
+        }
+
+        // Helper Update Progress Bar
+        function updateProgress(percent, statusText) {
+            progressBar.style.width = percent + '%';
+            progressPercent.innerText = percent + '%';
+            progressText.innerText = statusText;
+        }
+    </script>
+</body>
+</html>
