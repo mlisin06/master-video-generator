@@ -6,8 +6,8 @@
     <title>Generator Video Profesional Multi-Foto (Browser Direct)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FFmpeg WebAssembly Single-Threaded (Fix SharedArrayBuffer Error) -->
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
+    <!-- FFmpeg JS v0.9.8 (Build Paling Stabil untuk HP & Tanpa SharedArrayBuffer) -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.9.8/dist/ffmpeg.min.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 font-sans">
     <div class="max-w-2xl mx-auto bg-slate-800 rounded-2xl shadow-2xl p-6 border border-slate-700">
@@ -85,10 +85,10 @@
 
     <script>
         const { createFFmpeg, fetchFile } = FFmpeg;
-        // Inisialisasi FFmpeg versi kompatibel tanpa SharedArrayBuffer
+        // Gunakan versi 0.9.8 yang kompatibel penuh dengan browser seluler tanpa SharedArrayBuffer
         const ffmpeg = createFFmpeg({
             log: true,
-            corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js'
+            corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.9.8/dist/ffmpeg-core.js'
         });
 
         function log(message) {
@@ -123,7 +123,7 @@
 
             try {
                 if (!ffmpeg.isLoaded()) {
-                    log("Memuat engine FFmpeg kompatibel...");
+                    log("Memuat engine FFmpeg HP (Single-Thread)...");
                     await ffmpeg.load();
                 }
                 setProgress(15);
