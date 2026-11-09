@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator Video Profesional Multi-Foto (Browser Direct)</title>
+    <title>Generator Video Profesional Multi-Foto (Fast Render)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FFmpeg JS v0.9.8 (Build Paling Stabil untuk HP & Tanpa SharedArrayBuffer) -->
+    <!-- FFmpeg JS v0.9.8 -->
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.9.8/dist/ffmpeg.min.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8 font-sans">
@@ -14,8 +14,8 @@
         
         <!-- Header -->
         <div class="text-center mb-6">
-            <h1 class="text-2xl md:text-3xl font-bold text-emerald-400 mb-2">Video Generator Pro</h1>
-            <p class="text-slate-400 text-sm">Ubah Banyak Foto Sekaligus Menjadi Video Sinematik 9:16</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-emerald-400 mb-2">Video Generator Pro (Fast)</h1>
+            <p class="text-slate-400 text-sm">Ubah Banyak Foto Menjadi Video 9:16 Instan & Cepat</p>
         </div>
 
         <!-- Form Input -->
@@ -34,7 +34,7 @@
                 <label class="block text-sm font-semibold mb-2 text-slate-200">
                     ⏱️ Target Durasi Total Video (Detik)
                 </label>
-                <input type="number" id="inputDuration" value="10" min="3" max="60" 
+                <input type="number" id="inputDuration" value="10" min="2" max="60" 
                     class="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-2 text-slate-100 focus:outline-none focus:border-emerald-400">
                 <p class="text-xs text-slate-400 mt-1">Durasi total ini akan dibagi rata secara otomatis untuk setiap foto.</p>
             </div>
@@ -51,7 +51,7 @@
             <!-- Tombol Render -->
             <button id="btnProcess" onclick="processVideo()" 
                 class="w-full py-3 px-6 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition duration-200 shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed">
-                ⚡ Buat Video Multi-Foto Sekarang
+                ⚡ Buat Video Kilat Sekarang
             </button>
         </div>
 
@@ -85,7 +85,6 @@
 
     <script>
         const { createFFmpeg, fetchFile } = FFmpeg;
-        // Gunakan versi 0.9.8 yang kompatibel penuh dengan browser seluler tanpa SharedArrayBuffer
         const ffmpeg = createFFmpeg({
             log: true,
             corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.9.8/dist/ffmpeg-core.js'
@@ -123,18 +122,16 @@
 
             try {
                 if (!ffmpeg.isLoaded()) {
-                    log("Memuat engine FFmpeg HP (Single-Thread)...");
+                    log("Memuat engine FFmpeg Cepat...");
                     await ffmpeg.load();
                 }
-                setProgress(15);
+                setProgress(20);
 
                 const count = fotoFiles.length;
-                const durationPerPhoto = (totalDuration / count).toFixed(1);
-                const fps = 30;
-                const frames = Math.round(durationPerPhoto * fps);
+                const durationPerPhoto = (totalDuration / count).toFixed(2);
                 let tempFiles = [];
 
-                log(`Memproses ${count} foto dengan durasi ${durationPerPhoto} detik per foto...`);
+                log(`Memproses ${count} foto secara kilat...`);
 
                 for (let i = 0; i < count; i++) {
                     const fileName = `foto_${i}.jpg`;
@@ -142,39 +139,35 @@
                     
                     ffmpeg.FS('writeFile', fileName, await fetchFile(fotoFiles[i]));
                     
-                    let zoomFilter = "";
-                    if (i % 2 === 0) {
-                        zoomFilter = `scale=2000:2000,zoompan=z='min(zoom+0.0015,1.5)':d=${frames}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920,fps=${fps}`;
-                    } else {
-                        zoomFilter = `scale=2000:2000,zoompan=z='if(lte(zoom,1.0),1.5,max(zoom-0.0015,1.0))':d=${frames}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':s=1080x1920,fps=${fps}`;
-                    }
+                    // Skala 9:16 vertikal tanpa pemrosesan zoompan berat
+                    const fastFilter = `scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2`;
 
-                    log(`Merender klip ${i + 1} dari ${count}...`);
+                    log(`Merender foto ${i + 1} dari ${count}...`);
                     await ffmpeg.run(
                         '-loop', '1', '-i', fileName, '-t', String(durationPerPhoto),
-                        '-vf', zoomFilter,
-                        '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-an', outName
+                        '-vf', fastFilter,
+                        '-c:v', 'libx264', '-preset', 'ultrafast', '-pix_fmt', 'yuv420p', '-r', '25', '-an', outName
                     );
 
                     tempFiles.push(`file '${outName}'`);
-                    setProgress(15 + Math.round(((i + 1) / count) * 55));
+                    setProgress(20 + Math.round(((i + 1) / count) * 55));
                 }
 
-                log("Menggabungkan seluruh klip foto...");
+                log("Menggabungkan klip...");
                 const concatText = tempFiles.join('\n');
                 ffmpeg.FS('writeFile', 'concat.txt', concatText);
                 await ffmpeg.run('-f', 'concat', '-safe', '0', '-i', 'concat.txt', '-c', 'copy', 'merged.mp4');
-                setProgress(80);
+                setProgress(85);
 
                 let finalFile = 'merged.mp4';
 
                 if (audioInput) {
-                    log("Menambahkan audio / voiceover...");
+                    log("Menambahkan audio...");
                     ffmpeg.FS('writeFile', 'audio.mp3', await fetchFile(audioInput));
                     await ffmpeg.run(
                         '-i', 'merged.mp4', '-i', 'audio.mp3',
                         '-map', '0:v:0', '-map', '1:a:0',
-                        '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', 'final_output.mp4'
+                        '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', 'final_output.mp4'
                     );
                     finalFile = 'final_output.mp4';
                 }
